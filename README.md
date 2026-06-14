@@ -77,6 +77,13 @@ the human owns; **Foundry IQ** is read-only institutional grounding. See
 
 ### Microsoft IQ grounding
 
+The grounding model is **F.A.M. — Facts · Activity · Meaning = grounded truth**:
+Foundry IQ (Facts), Work IQ (Activity), Fabric IQ (Meaning). Three read-only
+lenses on the enterprise world, each earning a *distinct* citation, none merged
+into governed memory. Competence over that world is measured with grounded
+theory's **constant comparative analysis** — acceptance tests *fit* and *work*.
+See **[`docs/fam-and-the-engine.md`](docs/fam-and-the-engine.md)**.
+
 GM Louis grounds on **Microsoft Foundry IQ**[^foundryiq] — an Azure AI Search knowledge base of
 institutional reference content (vendor master, org directory, company handbook),
 exposed two ways: a native knowledge attach on the agent and the
