@@ -1,0 +1,8 @@
+{
+  "name": "Vendor Operations",
+  "description": "Accounts-payable semantics — vendors, invoices, payment terms, and the deviation-to-approval relationships that give a term business meaning",
+  "icon": "🏢",
+  "category": "finance",
+  "tags": ["vendor", "accounts-payable", "payment-terms", "fabric-iq", "meaning"],
+  "author": "JeremyGracey-AI"
+}
