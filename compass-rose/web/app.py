@@ -499,5 +499,42 @@ def api_trace():
     return jsonify(out)
 
 
+# ---- Tab 3: BlackBox IQ — vault & audit (governed memory) ----
+VAULT_PATH = os.environ.get("VAULT_PATH", os.path.expanduser("~/GitHub/scout-compass/vault"))
+
+
+def _read_decisions(limit=12):
+    """Parse decision-record frontmatter straight off the vault on disk (the blackbox)."""
+    rows = []
+    try:
+        for f in sorted(Path(VAULT_PATH, "decisions").glob("*.md")):
+            txt = f.read_text(encoding="utf-8")
+            if not txt.startswith("---"):
+                continue
+            meta = yaml.safe_load(txt.split("---", 2)[1]) or {}
+            rows.append({"id": meta.get("id"), "agent": meta.get("agent"), "task": meta.get("task"),
+                         "outcome": meta.get("outcome"), "confidence": meta.get("confidence"),
+                         "citations": meta.get("citations") or []})
+    except Exception:  # noqa: BLE001
+        pass
+    return rows[::-1][:limit]  # newest first
+
+
+@app.route("/vault")
+def vault_page():
+    return render_template("vault.html")
+
+
+@app.route("/api/vault")
+def api_vault():
+    audit = _mcp_call("memory_log", {}) or {}
+    props = _mcp_call("list_proposals", {}) or {}
+    return jsonify({
+        "decisions": _read_decisions(),
+        "audit": (audit.get("log") if isinstance(audit, dict) else None) or [],
+        "proposals": (props.get("proposals") if isinstance(props, dict) else None) or [],
+    })
+
+
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=True)
