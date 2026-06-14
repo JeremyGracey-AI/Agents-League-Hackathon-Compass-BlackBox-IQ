@@ -137,7 +137,7 @@ write("decisions/dec-001.md", `
 ---
 id: dec-001
 type: decision
-agent: atlas
+agent: gm-louis
 task: "Triage invoice #1042 from Globex Ltd"
 trigger: event
 citations: [skill-vendor-triage, kn-vendor-globex, kn-payment-policy]
@@ -168,7 +168,7 @@ write("decisions/dec-002.md", `
 ---
 id: dec-002
 type: decision
-agent: atlas
+agent: gm-louis
 task: "Renewal reminder for Globex Q3 contract"
 trigger: schedule
 citations: [kn-vendor-globex, kn-escalation-contacts]
@@ -197,7 +197,7 @@ write("decisions/dec-003.md", `
 ---
 id: dec-003
 type: decision
-agent: atlas
+agent: gm-louis
 task: "Answer pricing question from unknown vendor Vandelay Industries"
 trigger: user_request
 citations: [kn-escalation-contacts]
@@ -224,7 +224,7 @@ completed (confidence 0.5 — no vendor profile existed to verify against)
 
 // ---------- Vault contract (judge-facing) ----------
 write("README.md", `
-# Scout Compass vault
+# Compass-BlackBox IQ vault
 
 This folder is an agent's entire memory: skills, knowledge, decisions, and
 pending proposals — plain Markdown, Obsidian-compatible, under git.
@@ -248,7 +248,7 @@ records are append-only, even for humans. Behavior is revertible; history is not
 // ---------- Git ----------
 const git = (cmd) => execSync(`git ${cmd}`, { cwd: vault, stdio: "pipe" }).toString().trim();
 git("init");
-git('config user.name "scout-compass"');
+git('config user.name "compass-blackbox-iq"');
 git('config user.email "compass@local"');
 git("add -A");
 git('commit -m "[human] seed vault for demo"');

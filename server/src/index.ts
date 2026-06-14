@@ -1,5 +1,5 @@
 /**
- * index.ts — Scout Compass MCP server.
+ * index.ts — BlackBox IQ (GGR) MCP server.
  *
  * Modes:
  *   node dist/index.js              → stdio (Claude Desktop / MCP Inspector)
@@ -26,7 +26,7 @@ function buildServer(): McpServer {
   const vault = new Vault(VAULT_PATH);
   const git = new VaultGit(VAULT_PATH);
   void git.ensureRepo();
-  const server = new McpServer({ name: "scout-compass", version: "0.1.0" });
+  const server = new McpServer({ name: "ggr", version: "0.1.0" });
   registerTools(server, vault, git);
   // Additive, read-only IQ grounding. No-op (registers nothing) unless FOUNDRY_IQ_* is set,
   // so the governed loop stays byte-for-byte identical when IQ is unconfigured.
@@ -37,7 +37,7 @@ function buildServer(): McpServer {
 async function mainStdio(): Promise<void> {
   const server = buildServer();
   await server.connect(new StdioServerTransport());
-  console.error(`[scout-compass] stdio mode, vault: ${VAULT_PATH} | ${IQ_STATUS}`);
+  console.error(`[ggr] stdio mode, vault: ${VAULT_PATH} | ${IQ_STATUS}`);
 }
 
 async function mainHttp(): Promise<void> {
@@ -63,7 +63,7 @@ async function mainHttp(): Promise<void> {
 
   const port = Number(process.env.PORT ?? 3000);
   app.listen(port, () => {
-    console.error(`[scout-compass] http mode on :${port}/mcp, vault: ${VAULT_PATH} | ${IQ_STATUS}`);
+    console.error(`[ggr] http mode on :${port}/mcp, vault: ${VAULT_PATH} | ${IQ_STATUS}`);
   });
 }
 
