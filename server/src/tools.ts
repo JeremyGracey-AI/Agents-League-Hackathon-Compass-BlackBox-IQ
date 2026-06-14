@@ -94,7 +94,7 @@ export function registerTools(server: McpServer, vault: Vault, git: VaultGit): v
         `${outcome} (confidence ${confidence})`,
       ].join("\n");
       const rel = vault.write("decision", id, {
-        agent: "atlas",
+        agent: "gm-louis",
         task,
         trigger,
         citations,

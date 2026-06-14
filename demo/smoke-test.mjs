@@ -30,7 +30,7 @@ check(hits.some((h) => h.note.id === "kn-payment-policy"), "payment policy is re
 step(2, "agent freelances → log_decision with citations: []");
 const decId = vault.nextId("dec");
 const rel = vault.write("decision", decId, {
-  agent: "atlas", task: "Triage invoice INV-7731 from Initech (net-60 request)",
+  agent: "gm-louis", task: "Triage invoice INV-7731 from Initech (net-60 request)",
   trigger: "user_request", citations: [], outcome: "completed", confidence: 0.55,
   timestamp: new Date().toISOString(),
 }, `# Decision: Triage invoice INV-7731 from Initech (net-60 request)\n\n## Plan\n1. Identify sender and amount\n2. Confirm requested net-60 terms\n3. Draft confirmation reply\n\n## Evidence consulted\n(none — no knowledge cited)\n\n## Actions taken\nDrafted reply confirming net-60.\n\n## Outcome\ncompleted (confidence 0.55)`);

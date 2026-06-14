@@ -1,6 +1,6 @@
-# Wiring Atlas in Microsoft Foundry (and the fallback)
+# Wiring GM Louis in Microsoft Foundry (and the fallback)
 
-Step-by-step for connecting the Scout Compass MCP server to a Foundry agent.
+Step-by-step for connecting the Compass-BlackBox IQ MCP server to a Foundry agent.
 The server must already be reachable over HTTPS (dev tunnel) — verify first:
 
 ```bash
@@ -13,16 +13,16 @@ curl -X POST https://<tunnel-host>/mcp \
 
 ## Portal steps
 
-1. Foundry portal → your project → **Agents** → create agent, name it **Atlas**.
+1. Foundry portal → your project → **Agents** → create agent, name it **GM Louis**.
 2. Model: a **GPT-4o-class deployment** (create one under Deployments first if needed).
-3. **Instructions:** paste `agent/atlas-instructions.md` **verbatim** — the whole
+3. **Instructions:** paste `agent/gm-louis-instructions.md` **verbatim** — the whole
    file body below the `---` separator. Do not paraphrase; the citation-honesty
    wording (#3) is calibrated.
 4. **Tools → Add → MCP (remote)**:
    - Server URL: `https://<tunnel-host>/mcp`
    - Transport: streamable HTTP, no auth (tunnel is anonymous for the demo window)
    - Approve all tools if the portal asks for per-tool consent.
-5. Sanity ping in the playground: "List your tools." Atlas should name the
+5. Sanity ping in the playground: "List your tools." GM Louis should name the
    governed nine (recall_knowledge, get_skill, log_decision, run_audit, list_proposals,
    approve_proposal, reject_proposal, revert_memory, memory_log) — plus
    `ground_foundry_iq` when Foundry IQ grounding is configured (10 total).
@@ -35,14 +35,14 @@ tunnel vs. Foundry.
 ## The two agents (run 1 vs run 2)
 
 Live testing (June 12, gpt-4.1) showed the full contract works *too* well
-for run 1: Atlas recalls the payment policy and escalates the trap email
+for run 1: GM Louis recalls the payment policy and escalates the trap email
 every time — no freelance, nothing for the audit to catch. The demo
 therefore uses two agents against the same MCP server:
 
-- **Atlas — day 0** (`atlas-day0-instructions.md`): minimal prompt, no
+- **Freelance GM** (`freelance-gm-instructions.md`): minimal prompt, no
   recall-first or escalation rules. Runs the trap email in run 1 and
   freelances (confirms net-60, logs `citations: []`).
-- **Atlas** (`atlas-instructions.md`): the full contract. Runs the audit
+- **GM Louis** (`gm-louis-instructions.md`): the full contract. Runs the audit
   relay and run 2, following the promoted skill to `needs_human`.
 
 Say it plainly on camera: the contract is just a prompt — Compass's audit
@@ -50,7 +50,7 @@ catches the freelance regardless of which agent (or model) produced it.
 
 ## Trap-email test protocol (run BEFORE recording — at least 3 times)
 
-The single highest-risk behavior: **Atlas must log honestly-empty citations
+The single highest-risk behavior: **GM Louis must log honestly-empty citations
 when it freelances.** Per run:
 
 1. Reseed: `node demo/seed-vault.mjs` (kills run-to-run contamination).
@@ -58,16 +58,16 @@ when it freelances.** Per run:
 3. Check the vault: the new decision in `vault/decisions/` must have
    `citations: []` (or near-empty) and confidence ≲ 0.6.
 
-- **If Atlas pads citations with real note ids it didn't follow:** tighten
-  instruction #3 in `atlas-instructions.md` — e.g. append *"citing a note you
+- **If GM Louis pads citations with real note ids it didn't follow:** tighten
+  instruction #3 in `gm-louis-instructions.md` — e.g. append *"citing a note you
   did not actually retrieve and follow is a contract violation worse than an
   empty list."* Iterate on instructions only — NEVER on server code.
-- **If Atlas invents fake ids:** they surface in the decision as
+- **If GM Louis invents fake ids:** they surface in the decision as
   `citations_unresolved` — that is the audit story working. Narrate it on
   camera rather than fighting it.
 
 Then complete the loop once end-to-end: operator asks for an audit →
-3 findings → approve → re-run the email → Atlas follows the promoted skill
+3 findings → approve → re-run the email → GM Louis follows the promoted skill
 → `needs_human`, citing the new skill id.
 
 ## Fallback: Claude Desktop over stdio (decision gate June 13 only)
@@ -79,7 +79,7 @@ Claude Desktop as the agent — the governed loop is identical. Add to
 ```json
 {
   "mcpServers": {
-    "scout-compass": {
+    "ggr": {
       "command": "node",
       "args": ["/Users/jghome/GitHub/scout-compass/server/dist/index.js"],
       "env": {
@@ -92,12 +92,12 @@ Claude Desktop as the agent — the governed loop is identical. Add to
 
 Restart Claude Desktop, confirm the tools appear (9 governed, or 10 with
 Foundry IQ configured), and paste the contract
-section of `atlas-instructions.md` as the first message of the conversation
+section of `gm-louis-instructions.md` as the first message of the conversation
 (it is client-agnostic — nothing in it is Foundry-specific).
 
 If the fallback is what's on camera, add one honest line to the README, e.g.:
 
-> The demo video uses Claude Desktop as the MCP client; the Foundry "Atlas"
+> The demo video uses Claude Desktop as the MCP client; the Foundry "GM Louis"
 > wiring shown in the architecture diagram is documented in
 > `agent/foundry-setup.md` and works against the same server unchanged.
 

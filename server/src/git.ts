@@ -31,7 +31,7 @@ export class VaultGit {
     const isRepo = await this.git.checkIsRepo();
     if (!isRepo) {
       await this.git.init();
-      await this.git.addConfig("user.name", "scout-compass");
+      await this.git.addConfig("user.name", "compass-blackbox-iq");
       await this.git.addConfig("user.email", "compass@local");
     }
   }

@@ -1,8 +1,8 @@
-# Scout Compass-BlackBox IQ
+# Compass-BlackBox IQ
 
 **A git-backed, Markdown-native blackbox flight recorder and skill auditor for autonomous AI agents.**
 
-> The agent stack now governs two layers. Microsoft's **Agent 365** governs *permissions and security* — Entra, Defender, Purview, in one control plane.[^build2026] Orchestration platforms govern *actions* — approval gates, spend caps, tool limits.[^omnigent] Scout Compass governs the layer neither touches: **memory and competence**. What does your agent know? What did it do, and why? How does it improve — and who approved that?
+> The agent stack now governs two layers. Microsoft's **Agent 365** governs *permissions and security* — Entra, Defender, Purview, in one control plane.[^build2026] Orchestration platforms govern *actions* — approval gates, spend caps, tool limits.[^omnigent] Compass-BlackBox IQ governs the layer neither touches: **memory and competence**. What does your agent know? What did it do, and why? How does it improve — and who approved that?
 
 *Agents League @ AI Skills Fest 2026 · Reasoning Agents track · Microsoft Foundry + MCP*
 
@@ -44,7 +44,7 @@ flowchart LR
 ## Architecture
 
 ```
-Foundry Agent ("Atlas")  ──MCP (streamable HTTP)──►  Compass MCP Server (TypeScript)
+Foundry Agent ("GM Louis")  ──MCP (streamable HTTP)──►  Compass MCP Server (TypeScript)
    multi-step reasoning     10 tools                     │
         │                                                ▼
         │                          Vault (git repo, Markdown) — GOVERNED MEMORY
@@ -77,14 +77,14 @@ the human owns; **Foundry IQ** is read-only institutional grounding. See
 
 ### Microsoft IQ grounding
 
-Atlas grounds on **Microsoft Foundry IQ**[^foundryiq] — an Azure AI Search knowledge base of
+GM Louis grounds on **Microsoft Foundry IQ**[^foundryiq] — an Azure AI Search knowledge base of
 institutional reference content (vendor master, org directory, company handbook),
 exposed two ways: a native knowledge attach on the agent and the
 `ground_foundry_iq` tool above. Grounding is held strictly **orthogonal to the
 vault**: results carry `source:foundry-iq` provenance and `[iq:]` citations, are
 never merged or re-ranked with vault recall, and can never mutate or override what
 a human approved. The split is the thesis in one line — **Microsoft governs
-permissions and grounding; Scout Compass governs memory and competence.** Fabric
+permissions and grounding; Compass-BlackBox IQ governs memory and competence.** Fabric
 IQ and Work IQ are wired as additive siblings (read-only, same orthogonality
 contract) — see `docs/iq-source-decisions.md` for why they're deferred and what
 each would take.
@@ -101,7 +101,7 @@ node ../demo/smoke-test.mjs            # full loop, no LLM required — exits 0 
 ```
 
 Wire a Foundry Agent Service agent to `https://<host>/mcp` with the
-instructions in `agent/atlas-instructions.md`, point Obsidian at `vault/`,
+instructions in `agent/gm-louis-instructions.md`, point Obsidian at `vault/`,
 and run the demo script in `demo/`.
 
 ## How this maps to the judging criteria
@@ -120,7 +120,7 @@ Three layers govern an agent, and the third is the one without a control plane:
 |---|---|---|
 | Permissions & security | identity, policy, who/what an agent may touch | Agent 365 (Entra/Defender/Purview)[^build2026] |
 | Actions | approve/block/pause per action, spend, tools | orchestration platforms[^omnigent] |
-| **Memory & competence** | **what it knows, did, and learned — and who approved it** | **Scout Compass** |
+| **Memory & competence** | **what it knows, did, and learned — and who approved it** | **Compass-BlackBox IQ** |
 
 Where the third layer is non-optional:
 
@@ -128,16 +128,33 @@ Where the third layer is non-optional:
 - **Multi-agent teams** — when one agent's learned skill propagates across a fleet, a human must be able to see, approve, and revert what spreads.
 - **Long-running autonomy** — an always-on agent's competence drifts; the blackbox + audit make the drift visible and the human gate keeps it accountable.
 
-Scout Compass is the pattern, in 100% inspectable plain text.
+Compass-BlackBox IQ is the pattern, in 100% inspectable plain text.
 
 ## The bigger picture
 
-Scout Compass spans the full skill lifecycle. A companion authoring toolkit,
+Compass-BlackBox IQ spans the full skill lifecycle. A companion authoring toolkit,
 [Scout-Compass / skill-forge](https://github.com/JeremyGracey-AI/Scout-Compass),
 handles how skills are *born* — build → preview → install. **This repository
 governs how an agent *uses and improves* them at run-time**, and is the Agents
 League hackathon entry. Same principle end to end: humans approve what agents
 propose.
+
+## Roadmap
+
+The governed-memory loop here is the foundation — the **BlackBox IQ (GGR)** layer:
+Governance, Grounding, Recorder. The full platform extends it:
+
+- **Compass Rose** — skill direction & alignment: build role-aligned skills, the
+  open analog to "agents that learn how the business actually works."
+- **GM Louis** — the no-YAML web app: persona → preview → one-click install, so a
+  non-technical lead can stand up an aligned agent.
+- **Preventive governance** — block non-compliant actions in real time via the open
+  **Agent Control Specification**,[^acs] then **observe**: log, score, and explain
+  decisions after the fact with **ASSERT**-style evals.[^assert]
+- **Grounding** — add **Web IQ** for real-time facts alongside Foundry IQ.
+
+Framework-agnostic and open source — it *consumes* Microsoft's trust stack rather
+than duplicating it, which makes it complementary, not competitive.
 
 ## Stack
 
@@ -152,3 +169,7 @@ Built solo by [Jeremy Gracey](https://jeremygracey.ai) · [GitHub](https://githu
 [^foundryiq]: Daigle, Kyle. "Microsoft Build 2026: Be Yourself at Work — Foundry IQ." *The Official Microsoft Blog*, Microsoft, 2 June 2026, https://aka.ms/BuildFoundryIQ. Accessed 13 June 2026.
 
 [^omnigent]: *Omnigent: Meta-Orchestration for AI Agents.* omnigent-ai, GitHub, 13 June 2026, https://github.com/omnigent-ai/omnigent. Accessed 13 June 2026. (Representative of action-layer agent governance — approval gates, spend caps, tool restrictions.)
+
+[^acs]: Microsoft. "Agent Control Specification: Runtime Governance for AI Agents." *Microsoft Command Line*, 2 June 2026, https://commandline.microsoft.com/agent-control-specification-runtime-governance/. Accessed 13 June 2026.
+
+[^assert]: Microsoft. "ASSERT: Adaptive Spec-driven Scoring for Evaluation and Regression Testing." *Microsoft Command Line*, 2 June 2026, https://commandline.microsoft.com/assert-written-intent-executable-evals/. Accessed 13 June 2026.

@@ -2,8 +2,8 @@
 
 Foundry IQ lets a knowledge base combine multiple source types (Azure AI
 Search, Blob, Web, SharePoint, OneLake, **Fabric IQ**, Azure SQL, **Work IQ**,
-**File**, **MCP Server**). This is the record of which we chose for Scout
-Compass, and — for the ones we skipped — why, and exactly what it would take to
+**File**, **MCP Server**). This is the record of which we chose for Compass-BlackBox
+IQ, and — for the ones we skipped — why, and exactly what it would take to
 add them. The point is deliberate scope, not omission: one genuinely-working IQ
 satisfies the requirement; the rest are reachable extensions, documented so the
 path is honest.
@@ -28,7 +28,7 @@ Why `File` and not the heavier sources:
 - It is the honest shape of the data: a few flat reference documents. Wrapping
   them in a lakehouse or a tenant would be ceremony, not capability.
 
-This knowledge base is consumed two ways, both read-only: natively by the Atlas
+This knowledge base is consumed two ways, both read-only: natively by the GM Louis
 agent (Foundry IQ attached in the Knowledge panel) **and** by the Compass MCP
 server's `ground_foundry_iq` tool (`server/src/ground.ts`), which calls the
 AI Search `/retrieve` action over `fetch`.
@@ -75,7 +75,7 @@ substitute that would exercise it honestly.
 
 **What it would take to add:** connect the M365 tenant's Work IQ as a knowledge
 source on a tenant with real (or seeded) organizational data and Copilot access.
-For an enterprise-ops agent like Atlas this is the highest-value grounding of the
+For an enterprise-ops agent like GM Louis this is the highest-value grounding of the
 three — "what did we decide in last week's vendor review?" — but it is a
 tenant-data dependency, not a repo artifact.
 
