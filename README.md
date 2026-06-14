@@ -1,6 +1,5 @@
-<p align="center"><img src="docs/submission/compass-logo.png" alt="Compass-BlackBox IQ" width="120"/></p>
-<h1 align="center">Compass-BlackBox IQ</h1>
-<p align="center"><b>The governance layer for an autonomous agent's memory and competence —<br/>grounded on Microsoft's F.A.M. intelligence layer, owned by the human.</b></p>
+<p align="center"><img src="docs/submission/banner.png" alt="Compass-BlackBox IQ — the governance layer for an agent's memory &amp; competence, grounded on Microsoft's F.A.M. intelligence layer" width="100%"/></p>
+
 <p align="center"><i>Agents League @ AI Skills Fest 2026 · Reasoning Agents track · Microsoft Foundry + MCP</i></p>
 
 ---
