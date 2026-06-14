@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>GM Louis</title>
+<title>Compass Rose · powered by GM Louis</title>
 <link rel="icon" type="image/png" href="/static/compass-logo.png"/>
 <style>
   :root {
@@ -130,8 +130,9 @@
 </head>
 <body>
 <header>
-  <h1>GM Louis</h1>
-  <span class="sub">Navigate from idea to installed skill with a smooth build, preview, and install flow.</span>
+  <img src="/static/compass-logo.png" alt="Compass Rose" style="align-self:center;width:40px;height:40px;border-radius:10px;flex:none"/>
+  <h1>Compass Rose <span style="font-weight:400;color:var(--ink-dim);font-size:.8em">· powered by GM Louis</span></h1>
+  <span class="sub">Set a destination — pick a saved persona or define a new executive — and Compass Rose aligns it to role-fit skills you can preview and install. No YAML.</span>
   <span id="authbar"></span>
   <span style="margin-left:auto;display:inline-flex;gap:8px;align-items:center">
     <a href="/trace" style="color:#2563eb;text-decoration:none;font-size:13px;border:1px solid #cfd6e6;padding:7px 12px;border-radius:8px;white-space:nowrap">reasoning trace →</a>
@@ -152,8 +153,8 @@
     </div>
 
     <div class="seg" id="mode">
-      <button data-mode="new" class="on">Build a new executive</button>
-      <button data-mode="saved">Use a saved persona</button>
+      <button data-mode="saved" class="on">Use a saved persona</button>
+      <button data-mode="new">Build a new executive</button>
     </div>
 
     <div id="savedPane" style="display:none">
@@ -265,7 +266,7 @@
   const supportsFS = "showDirectoryPicker" in window;
   let dirHandle = null;          // granted Scout skills folder
   let lastResult = null;         // last /api/generate response
-  let mode = "new";
+  let mode = "saved";            // lead with the saved persona tab
 
   // ---- helpers ----
   const $ = (id) => document.getElementById(id);
@@ -378,6 +379,9 @@
       $("builder").style.display = mode === "saved" ? "none" : "block";
     };
   });
+  // apply the default mode on load (saved persona leads)
+  $("savedPane").style.display = mode === "saved" ? "block" : "none";
+  $("builder").style.display = mode === "saved" ? "none" : "block";
 
   // ---- build the persona payload from the form ----
   function buildPersona() {
