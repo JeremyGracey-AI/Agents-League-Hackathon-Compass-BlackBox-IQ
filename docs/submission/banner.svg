@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1600 460" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <defs>
+    <radialGradient id="bbg" cx="68%" cy="0%" r="110%"><stop offset="0%" stop-color="#16224a"/><stop offset="58%" stop-color="#0a0e1a"/></radialGradient>
+    <linearGradient id="trace" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#3b82f6" stop-opacity="0"/><stop offset="100%" stop-color="#3b82f6" stop-opacity="0.9"/></linearGradient>
+  </defs>
+  <rect width="1600" height="460" fill="url(#bbg)"/>
+  <rect x="0" y="457" width="1600" height="3" fill="#1d2840"/>
+
+  <!-- brand: logo + name -->
+  <image xlink:href="compass-logo.png" x="70" y="120" width="190" height="190"/>
+  <text x="298" y="196" font-size="58" font-weight="750" fill="#ffffff">Compass-BlackBox IQ</text>
+  <text x="300" y="248" font-size="26" fill="#aab6d6">The governance layer for an agent's <tspan fill="#fff" font-weight="600">memory &amp; competence</tspan>.</text>
+  <text x="300" y="290" font-size="19" fill="#7f8db0">Grounded on Microsoft's F.A.M. intelligence layer · owned by the human · in plain text.</text>
+  <g font-size="14" font-weight="600">
+    <rect x="300" y="320" width="150" height="34" rx="17" fill="#101a2e" stroke="#2c3a5e"/><text x="375" y="342" text-anchor="middle" fill="#9fd8cd">3 Microsoft IQ surfaces</text>
+    <rect x="460" y="320" width="120" height="34" rx="17" fill="#101a2e" stroke="#2c3a5e"/><text x="520" y="342" text-anchor="middle" fill="#cdd9f0">governed loop</text>
+    <rect x="590" y="320" width="108" height="34" rx="17" fill="#101a2e" stroke="#2c3a5e"/><text x="644" y="342" text-anchor="middle" fill="#cdd9f0">human-gated</text>
+  </g>
+
+  <!-- F.A.M. → governed vault motif (right) -->
+  <g transform="translate(40,0)">
+    <!-- traces -->
+    <path d="M1108,150 C1200,150 1230,230 1330,230" stroke="#3b82f6" stroke-width="2" fill="none" opacity="0.7"/>
+    <path d="M1108,230 L1330,230" stroke="#16c2a3" stroke-width="2" fill="none" opacity="0.7"/>
+    <path d="M1108,310 C1200,310 1230,230 1330,230" stroke="#9871f0" stroke-width="2" fill="none" opacity="0.7"/>
+    <circle cx="1200" cy="150" r="3" fill="#3b82f6"/><circle cx="1245" cy="230" r="3" fill="#16c2a3"/><circle cx="1200" cy="310" r="3" fill="#9871f0"/>
+
+    <!-- F.A.M. nodes -->
+    <circle cx="1090" cy="150" r="11" fill="#0a0e1a" stroke="#3b82f6" stroke-width="3"/><text x="1072" y="156" text-anchor="end" font-size="16" font-weight="600" fill="#93c5fd">Facts</text><text x="1072" y="175" text-anchor="end" font-size="11" fill="#5d6c8d">Foundry IQ</text>
+    <circle cx="1090" cy="230" r="11" fill="#0a0e1a" stroke="#16c2a3" stroke-width="3"/><text x="1072" y="236" text-anchor="end" font-size="16" font-weight="600" fill="#5eead4">Activity</text><text x="1072" y="255" text-anchor="end" font-size="11" fill="#5d6c8d">Work IQ</text>
+    <circle cx="1090" cy="310" r="11" fill="#0a0e1a" stroke="#9871f0" stroke-width="3"/><text x="1072" y="316" text-anchor="end" font-size="16" font-weight="600" fill="#c4b5fd">Meaning</text><text x="1072" y="335" text-anchor="end" font-size="11" fill="#5d6c8d">Fabric IQ</text>
+
+    <!-- seam + governed vault -->
+    <line x1="1330" y1="96" x2="1330" y2="364" stroke="#26324f" stroke-dasharray="5 5"/>
+    <text x="1330" y="88" text-anchor="middle" font-size="11" fill="#5d6c8d">SEAM · never merged</text>
+    <rect x="1352" y="186" width="178" height="88" rx="14" fill="#1c1407" stroke="#f59e0b" stroke-width="2"/>
+    <text x="1441" y="222" text-anchor="middle" font-size="19" font-weight="700" fill="#fcd34d">governed vault</text>
+    <text x="1441" y="248" text-anchor="middle" font-size="13" fill="#a98c4e">git · human-gated · revertible</text>
+    <text x="1441" y="300" text-anchor="middle" font-size="12" fill="#5d6c8d">grounding is rented · memory is owned</text>
+  </g>
+</svg>
