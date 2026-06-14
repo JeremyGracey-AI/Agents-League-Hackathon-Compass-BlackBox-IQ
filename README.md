@@ -1,18 +1,23 @@
 <p align="center"><img src="docs/submission/compass-logo.png" alt="Compass-BlackBox IQ" width="120"/></p>
 <h1 align="center">Compass-BlackBox IQ</h1>
-<p align="center"><b>The flight recorder for autonomous agents — governed memory &amp; competence, in plain text.</b></p>
-
-**A git-backed, Markdown-native blackbox flight recorder and skill auditor for autonomous AI agents.**
-
-> The agent stack now governs two layers. Microsoft's **Agent 365** governs *permissions and security* — Entra, Defender, Purview, in one control plane.[^build2026] Orchestration platforms govern *actions* — approval gates, spend caps, tool limits.[^omnigent] Compass-BlackBox IQ governs the layer neither touches: **memory and competence**. What does your agent know? What did it do, and why? How does it improve — and who approved that?
-
-*Agents League @ AI Skills Fest 2026 · Reasoning Agents track · Microsoft Foundry + MCP*
+<p align="center"><b>The governance layer for an autonomous agent's memory and competence —<br/>grounded on Microsoft's F.A.M. intelligence layer, owned by the human.</b></p>
+<p align="center"><i>Agents League @ AI Skills Fest 2026 · Reasoning Agents track · Microsoft Foundry + MCP</i></p>
 
 ---
 
-## The problem
+## The thesis
 
-Autonomous agents act around the clock. When one makes a bad call, permission systems tell you it was *allowed* — not *why it happened*. And when agents "learn," that learning is invisible: buried in vendor-side memory you can't read, diff, or revoke.
+Microsoft's stack governs an agent's **permissions, actions, and grounding** — identity and policy (Agent 365),[^build2026] approval gates and spend caps (orchestration platforms),[^omnigent] and the intelligence layer it reasons over. **Compass-BlackBox IQ governs the layer no one else does: memory and competence.** What does your agent know? What did it do, and why? How does it improve — and who approved that?
+
+It is three parts working as one system:
+
+- **Governed memory** — an agent's decisions, skills, and knowledge as plain Markdown in a git repo *the human owns*. Every action is an immutable, server-cited decision record; the git log **is** the audit trail. **Agents propose; humans promote** — and the blackbox is append-only, so behavior is revertible but history is not.
+- **F.A.M. grounding** — the agent reasons over Microsoft's intelligence layer as three orthogonal lenses: **Foundry IQ (Facts) · Work IQ (Activity) · Fabric IQ (Meaning)** — read-only, source-tagged, and *never merged* into governed memory.
+- **A competence engine** — an audit mines the decision records and drafts new skills from the notes the agent overlooked; a human approves them. Competence is developed the way a researcher builds theory: grounded theory's **constant comparative analysis** (fit · work · saturation).
+
+Not a memory store, and not a logger — **a governance layer that makes an agent's competence auditable, attributable, and revertible, in 100% inspectable plain text.**
+
+---
 
 ## The idea
 
