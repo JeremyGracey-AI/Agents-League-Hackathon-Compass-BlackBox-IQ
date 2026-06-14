@@ -19,9 +19,10 @@
   header img{width:52px;height:52px;border-radius:13px;flex:none;box-shadow:0 6px 22px rgba(59,130,246,.18)}
   .brand h1{margin:0;font-size:21px;letter-spacing:.2px;font-weight:650}
   .brand p{margin:3px 0 0;color:var(--mut);font-size:12.5px}
-  .nav{margin-left:auto}
+  .nav{margin-left:auto;display:flex;gap:8px}
   .nav a{color:var(--mut);text-decoration:none;font-size:13px;border:1px solid var(--line);padding:8px 13px;border-radius:9px}
-  .nav a:hover{color:var(--ink);border-color:var(--line2)}
+  .nav a:hover,.nav a.on{color:var(--ink);border-color:var(--line2)}
+  .nav a.on{background:#16203a}
   .thesis{color:var(--mut);font-size:13.5px;margin:16px 0 20px;line-height:1.55;max-width:880px}
   .thesis b{color:var(--ink);font-weight:600}
   .bar{display:flex;gap:10px}
@@ -74,7 +75,7 @@
       <h1>GM Louis — F.A.M. reasoning trace</h1>
       <p>Compass-BlackBox IQ · one task → four surfaces → the seam, made visible</p>
     </div>
-    <div class="nav"><a href="/">← skill-forge</a></div>
+    <div class="nav"><a href="/">skill-forge</a><a href="/trace" class="on">reasoning trace</a><a href="/vault">vault &amp; audit</a></div>
   </header>
 
   <div class="thesis">
