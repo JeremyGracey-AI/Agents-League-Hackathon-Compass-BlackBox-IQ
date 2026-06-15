@@ -1,6 +1,6 @@
 "use client"
 
-import { ArrowUp, Mic, Paperclip, Settings, Plus } from "lucide-react"
+import { ArrowUp, Mic, MicOff, Paperclip, Settings, Plus, Volume2, VolumeX } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useEffect, useRef, useState } from "react"
 import { ParticleOrb } from "@/components/particle-orb"
@@ -24,6 +24,9 @@ export function ChatArea() {
   const [loading, setLoading] = useState(false)
   const endRef = useRef<HTMLDivElement>(null)
   const taRef = useRef<HTMLTextAreaElement>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const [listening, setListening] = useState(false)
+  const [speakOn, setSpeakOn] = useState(true)
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -48,14 +51,17 @@ export function ChatArea() {
       if (!res.body) throw new Error("no stream")
       const reader = res.body.getReader()
       const dec = new TextDecoder()
+      let acc = ""
       for (;;) {
         const { done, value } = await reader.read()
         if (done) break
         const chunk = dec.decode(value, { stream: true })
+        acc += chunk
         setMessages((m) =>
           m.map((mm) => (mm.id === asstId ? { ...mm, content: mm.content + chunk } : mm)),
         )
       }
+      if (speakOn && acc.trim()) speak(acc)
     } catch {
       setMessages((m) =>
         m.map((mm) =>
@@ -65,6 +71,50 @@ export function ChatArea() {
     } finally {
       setLoading(false)
     }
+  }
+
+  function stopAudio() {
+    if (audioRef.current) {
+      audioRef.current.pause()
+      audioRef.current = null
+    }
+  }
+
+  async function speak(text: string) {
+    try {
+      stopAudio()
+      const res = await fetch("/api/speak", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text }),
+      })
+      if (!res.ok || res.status === 204) return
+      const blob = await res.blob()
+      if (!blob.size) return
+      const a = new Audio(URL.createObjectURL(blob))
+      audioRef.current = a
+      a.play().catch(() => {})
+    } catch {}
+  }
+
+  function startListening() {
+    const SR = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
+    if (!SR) {
+      alert("Voice input needs Chrome or Edge.")
+      return
+    }
+    const rec = new SR()
+    rec.lang = "en-US"
+    rec.interimResults = false
+    rec.maxAlternatives = 1
+    setListening(true)
+    rec.onresult = (e: any) => {
+      const t = e.results?.[0]?.[0]?.transcript || ""
+      if (t) send(t)
+    }
+    rec.onerror = () => setListening(false)
+    rec.onend = () => setListening(false)
+    rec.start()
   }
 
   const empty = messages.length === 0
@@ -93,6 +143,18 @@ export function ChatArea() {
           <span className="text-[11px] font-medium text-amber-300/80 border border-amber-400/30 rounded-full px-2.5 py-1">
             governed · cited
           </span>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="btn-3d h-8 w-8 text-muted-foreground hover:text-foreground"
+            aria-label={speakOn ? "Mute GM Louis" : "Unmute GM Louis"}
+            onClick={() => {
+              setSpeakOn((v) => !v)
+              stopAudio()
+            }}
+          >
+            {speakOn ? <Volume2 className="w-4 h-4" /> : <VolumeX className="w-4 h-4" />}
+          </Button>
           {!empty && (
             <Button
               variant="ghost"
@@ -202,10 +264,11 @@ export function ChatArea() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="btn-3d h-9 w-9 text-white hover:text-foreground"
-                  aria-label="Voice"
+                  className={`btn-3d h-9 w-9 ${listening ? "text-red-400" : "text-white hover:text-foreground"}`}
+                  aria-label="Voice input"
+                  onClick={startListening}
                 >
-                  <Mic className="w-4 h-4" />
+                  {listening ? <MicOff className="w-4 h-4 animate-pulse" /> : <Mic className="w-4 h-4" />}
                 </Button>
                 <Button
                   size="icon"
