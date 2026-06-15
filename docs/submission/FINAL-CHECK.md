@@ -25,7 +25,7 @@
 - Live walkthrough: `https://compass-blackbox-iq.vercel.app`
 - GM Louis (agent): `https://gm-louis.vercel.app`
 - Compass Rose (skill-forge): `https://compass-rose-beta.vercel.app`
-- Video: **‹paste your YouTube/Vimeo URL›**
+- Video: `https://compass-blackbox-iq.vercel.app/compass-blackbox-iq-video.mp4`
 
 ## Last-second checks (10 seconds)
 - [ ] All 3 live URLs open in a fresh tab

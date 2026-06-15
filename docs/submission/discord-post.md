@@ -20,4 +20,4 @@ It grounds across all three Microsoft IQ surfaces — **F.A.M.: Facts (Foundry I
 📦 Repo → <https://github.com/JeremyGracey-AI/Agents-League-Hackathon-Compass-BlackBox-IQ>
 
 Reasoning Agents track · Microsoft Foundry + MCP · built solo.
-🎥 Demo video → _[paste URL]_
+🎥 Demo video → <https://compass-blackbox-iq.vercel.app/compass-blackbox-iq-video.mp4>
