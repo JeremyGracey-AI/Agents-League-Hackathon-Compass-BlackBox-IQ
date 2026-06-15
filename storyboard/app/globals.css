@@ -1,0 +1,91 @@
+:root {
+  --bg-0: #0a0e1a;
+  --bg-1: #0d1424;
+  --bg-2: #101a2e;
+  --glow: #16224a;
+  --ink: #e8ebf0;
+  --ink-dim: #9aa3b2;
+  --ink-mute: #5d6c8d;
+  --line: #26324f;
+  --facts: #4f8cff;
+  --facts-t: #93c5fd;
+  --activity: #16c2a3;
+  --activity-t: #5eead4;
+  --meaning: #9871f0;
+  --meaning-t: #c4b5fd;
+  --vault: #f59e0b;
+  --vault-t: #fcd34d;
+  --vault-fill: #1c1407;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--bg-0);
+  color: var(--ink);
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.snap {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.panel {
+  position: relative;
+  min-height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8vh 8vw;
+  overflow: hidden;
+}
+
+.glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(58% 80% at 80% -10%, var(--glow), transparent 62%);
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, "Cascadia Code", monospace;
+}
+
+.eyebrow {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+.pill {
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snap {
+    scroll-behavior: auto;
+  }
+}
