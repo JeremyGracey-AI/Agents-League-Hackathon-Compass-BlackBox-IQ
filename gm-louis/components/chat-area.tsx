@@ -19,6 +19,15 @@ function uid() {
   return Math.random().toString(36).slice(2) + Date.now().toString(36)
 }
 
+// Anthropic-style greeting that follows the visitor's local clock.
+function greetingForHour(h: number) {
+  if (h < 5) return "Working late?"
+  if (h < 12) return "Good morning."
+  if (h < 17) return "Good afternoon."
+  if (h < 22) return "Good evening."
+  return "Working late?"
+}
+
 export function ChatArea() {
   const [messages, setMessages] = useState<Msg[]>([])
   const [input, setInput] = useState("")
@@ -26,6 +35,7 @@ export function ChatArea() {
   const [listening, setListening] = useState(false)
   const [speakOn, setSpeakOn] = useState(true)
   const [playingId, setPlayingId] = useState<string | null>(null)
+  const [greeting, setGreeting] = useState<string | null>(null)
   const endRef = useRef<HTMLDivElement>(null)
   const taRef = useRef<HTMLTextAreaElement>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -35,6 +45,15 @@ export function ChatArea() {
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, loading])
+
+  // Set on the client (avoids SSR/local-time hydration mismatch); re-checks so it
+  // rolls over if the tab is left open across an hour boundary.
+  useEffect(() => {
+    const update = () => setGreeting(greetingForHour(new Date().getHours()))
+    update()
+    const t = setInterval(update, 60_000)
+    return () => clearInterval(t)
+  }, [])
 
   // Feed the playing audio's amplitude into the shared level the sphere reads.
   function startMeter(a: HTMLAudioElement) {
@@ -194,9 +213,9 @@ export function ChatArea() {
       <header className="relative z-10 flex items-center justify-between px-5 py-4 md:px-8">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/logo-lockup.png"
+          src="/logo-wordmark-line.png"
           alt="GM Louis — Agentic Governance Management"
-          className="h-7 w-auto select-none md:h-8"
+          className="h-6 w-auto select-none md:h-7"
           draggable={false}
         />
         <div className="flex items-center gap-2">
@@ -238,16 +257,17 @@ export function ChatArea() {
           <div className="flex w-full min-w-0 max-w-2xl flex-1 flex-col items-center justify-center px-6 text-center">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/logo-horizontal.png"
+              src="/logo-wordmark.png"
               alt="GM Louis — Agentic Governance Management"
-              className="fade-in-up mb-6 w-72 max-w-full select-none sm:w-96 md:w-[440px]"
+              className="fade-in-up mb-6 w-60 max-w-full select-none sm:w-72 md:w-[340px]"
               draggable={false}
             />
             <h1
               className="fade-in-up font-display text-3xl font-medium tracking-tight sm:text-4xl md:text-5xl"
               style={{ animationDelay: "0.05s" }}
+              suppressHydrationWarning
             >
-              I&rsquo;m GM Louis.
+              {greeting ?? "I’m GM Louis."}
             </h1>
             <p
               className="fade-in-up mt-6 max-w-xl text-pretty leading-relaxed text-muted-foreground"
