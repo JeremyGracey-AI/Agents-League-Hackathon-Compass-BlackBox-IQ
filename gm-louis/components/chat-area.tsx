@@ -4,6 +4,7 @@ import { ArrowUp, Mic, Paperclip, Settings, Plus } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useEffect, useRef, useState } from "react"
 import { ParticleOrb } from "@/components/particle-orb"
+import ReactMarkdown from "react-markdown"
 
 type Msg = { id: string; role: "user" | "assistant"; content: string }
 
@@ -22,6 +23,7 @@ export function ChatArea() {
   const [input, setInput] = useState("")
   const [loading, setLoading] = useState(false)
   const endRef = useRef<HTMLDivElement>(null)
+  const taRef = useRef<HTMLTextAreaElement>(null)
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -33,6 +35,7 @@ export function ChatArea() {
     const next = [...messages, { id: uid(), role: "user" as const, content }]
     setMessages(next)
     setInput("")
+    if (taRef.current) taRef.current.style.height = "auto"
     setLoading(true)
     const asstId = uid()
     setMessages((m) => [...m, { id: asstId, role: "assistant", content: "" }])
@@ -79,6 +82,8 @@ export function ChatArea() {
       {/* Header */}
       <header className="relative z-10 flex items-center justify-between px-6 py-4 border-b border-border/50 backdrop-blur-sm bg-background/30">
         <div className="flex items-center gap-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/compass-logo.png" alt="" className="w-7 h-7 rounded-lg" />
           <span className="text-base font-semibold tracking-tight">GM Louis</span>
           <span className="text-xs text-muted-foreground hidden sm:inline">
             reasoning agent · Compass-BlackBox IQ
@@ -144,7 +149,15 @@ export function ChatArea() {
                         : "bg-background/40 border border-border/40 text-foreground/90"
                     }`}
                   >
-                    {m.content || (
+                    {m.content ? (
+                      m.role === "assistant" ? (
+                        <div className="text-[15px] leading-relaxed [&_p]:my-2 [&_p:first-child]:mt-0 [&_p:last-child]:mb-0 [&_ul]:my-2 [&_ul]:list-disc [&_ul]:pl-5 [&_ol]:my-2 [&_ol]:list-decimal [&_ol]:pl-5 [&_li]:my-1 [&_strong]:font-semibold [&_strong]:text-foreground [&_code]:bg-black/40 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-amber-200/90">
+                          <ReactMarkdown>{m.content}</ReactMarkdown>
+                        </div>
+                      ) : (
+                        m.content
+                      )
+                    ) : (
                       <span className="inline-flex gap-1 items-center text-muted-foreground">
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-300/80 animate-pulse" />
                         thinking
@@ -162,8 +175,14 @@ export function ChatArea() {
         <div className="w-full max-w-3xl px-4 md:px-6 pb-6">
           <div className="input-3d bg-gradient-to-br from-secondary/70 via-secondary/60 to-secondary/50 backdrop-blur-xl rounded-2xl border border-border/50 p-4 shadow-2xl">
             <textarea
+              ref={taRef}
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={(e) => {
+                setInput(e.target.value)
+                const el = e.target
+                el.style.height = "auto"
+                el.style.height = Math.min(el.scrollHeight, 160) + "px"
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault()
