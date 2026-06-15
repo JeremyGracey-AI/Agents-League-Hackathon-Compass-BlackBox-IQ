@@ -46,5 +46,8 @@ TypeScript · MCP SDK (streamable HTTP + stdio) · Microsoft Foundry Agent Servi
 
 ## Links
 - Repo: github.com/JeremyGracey-AI/Agents-League-Hackathon-Compass-BlackBox-IQ
+- **Live walkthrough:** https://compass-blackbox-iq.vercel.app (add `?present=1` for autoplay)
+- **GM Louis (reasoning agent):** https://gm-louis.vercel.app
+- **Compass Rose (skill-forge):** https://compass-rose-beta.vercel.app
 - Deck: `docs/submission/slide-*.png`
 - Video: _[add URL]_

@@ -18,6 +18,16 @@ It is three parts working as one system:
 
 Not a memory store, and not a logger — **a governance layer that makes an autonomous agent's competence auditable, attributable, and revertible, in 100% inspectable plain text.**
 
+## Live — open it now
+
+| Surface | URL | What it is |
+|---|---|---|
+| **Animated walkthrough** | [compass-blackbox-iq.vercel.app](https://compass-blackbox-iq.vercel.app) | the 8-panel explainer of the whole thesis — add [`?present=1`](https://compass-blackbox-iq.vercel.app/?present=1) for autoplay |
+| **GM Louis** | [gm-louis.vercel.app](https://gm-louis.vercel.app) | the reasoning agent, live — ask it what it governs |
+| **Compass Rose** | [compass-rose-beta.vercel.app](https://compass-rose-beta.vercel.app) | the no-YAML skill-forge: pick a persona → preview role-fit skills → one-click install |
+
+The hosted skill-forge is fully standalone; the reasoning-trace and governed-vault views run live against the MCP server (`docs/deploy-azure-live.md`).
+
 ---
 
 ## The idea
