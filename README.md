@@ -53,7 +53,7 @@ flowchart LR
 
 ```
 Foundry Agent ("GM Louis")  ──MCP (streamable HTTP, auth-gated)──►  BlackBox IQ (GGR) server (TypeScript)
-   multi-step reasoning      11 tools                                │
+   multi-step reasoning      12 tools                                │
         │                                                            ▼
         │                          Vault (git repo, Markdown) — GOVERNED MEMORY
         │                          decisions · skills · knowledge · proposed
@@ -84,6 +84,7 @@ called anonymously. See `docs/architecture.svg` and `docs/fam-and-the-engine.md`
 | `reject_proposal` | **human gate** | delete with reason |
 | `revert_memory` | **human gate** | `git revert` a `[compass]`/`[human]` commit. Refuses `[blackbox]` commits: the flight recorder is append-only |
 | `memory_log` | anyone | the audit trail itself |
+| `list_decisions` | anyone (read) | recent decision records from the blackbox — id, agent, task, outcome, confidence, citations; read-only, powers the live vault dashboard |
 | `ground_foundry_iq` | agent | **read-only IQ grounding — Facts.** Microsoft Foundry IQ (Azure AI Search KB) for institutional facts (vendor master, org directory, handbook), tagged `source:foundry-iq` / `[iq:]`. Held separate from vault memory: never merged with `recall_knowledge`, never cited as a vault note |
 | `ground_work_iq` | agent | **read-only IQ grounding — Activity.** Live calls to the **Microsoft Work IQ Gateway** (M365 Copilot Chat API) for the signed-in user's organizational context (mail, calendar, people), tagged `source:work-iq` / `[work:]`. Per-user (the token scopes what it sees); same orthogonality contract |
 

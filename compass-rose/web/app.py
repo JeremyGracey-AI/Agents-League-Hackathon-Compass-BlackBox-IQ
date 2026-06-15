@@ -527,10 +527,17 @@ def vault_page():
 
 @app.route("/api/vault")
 def api_vault():
+    # Decisions via the MCP server so the vault tab works when the web app and the
+    # MCP server are separate Azure containers; fall back to reading the local vault
+    # on disk for single-host / local-dev setups.
+    dec = _mcp_call("list_decisions", {}) or {}
+    decisions = dec.get("decisions") if isinstance(dec, dict) else None
+    if not decisions:
+        decisions = _read_decisions()
     audit = _mcp_call("memory_log", {}) or {}
     props = _mcp_call("list_proposals", {}) or {}
     return jsonify({
-        "decisions": _read_decisions(),
+        "decisions": decisions,
         "audit": (audit.get("log") if isinstance(audit, dict) else None) or [],
         "proposals": (props.get("proposals") if isinstance(props, dict) else None) or [],
     })

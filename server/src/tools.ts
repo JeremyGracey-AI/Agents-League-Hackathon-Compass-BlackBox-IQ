@@ -213,4 +213,28 @@ export function registerTools(server: McpServer, vault: Vault, git: VaultGit): v
     { description: "Show the recent git history of the vault — the audit trail itself.", inputSchema: {} },
     async () => text({ log: await git.recentLog(15) }),
   );
+
+  server.registerTool(
+    "list_decisions",
+    {
+      description:
+        "List recent decision records from the blackbox (id, agent, task, outcome, confidence, citations), newest first. Read-only — never writes or modifies the vault.",
+      inputSchema: {},
+    },
+    async () => {
+      const decisions = vault
+        .list("decision")
+        .map((n) => ({
+          id: String(n.data.id ?? n.id),
+          agent: n.data.agent ?? null,
+          task: n.data.task ?? null,
+          outcome: n.data.outcome ?? null,
+          confidence: n.data.confidence ?? null,
+          citations: Array.isArray(n.data.citations) ? n.data.citations : [],
+        }))
+        .sort((a, b) => b.id.localeCompare(a.id))
+        .slice(0, 12);
+      return text({ decisions });
+    },
+  );
 }
