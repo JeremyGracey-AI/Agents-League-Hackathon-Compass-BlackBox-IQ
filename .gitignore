@@ -10,3 +10,5 @@ vault/
 *.env
 !*.env.example
 .vercel
+# Local Claude Code tooling (skills/commands) — not project code.
+.claude/
