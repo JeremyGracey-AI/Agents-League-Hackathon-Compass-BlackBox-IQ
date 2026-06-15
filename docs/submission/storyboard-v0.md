@@ -423,7 +423,7 @@ Keep scroll-snap working when not presenting.
 - **Honesty badge:** Fabric IQ must stay **ROADMAP** (amber), Foundry/Work **LIVE**. Don't let v0 "upgrade" it.
 - **Recording:** open `?present=1` fullscreen at 1920×1080, record the ~59s loop, then cut under your VO.
   Panels 3–5 are the strongest stills if you need thumbnails.
-- **Palette source of truth:** matches `docs/submission/banner.svg` and `compass-rose/web` exactly, so
+- **Palette source of truth:** matches `compass-rose/web` and the deck slides (`slide-*.svg`) exactly, so
   the v0 page, the deck, and the live dashboards all read as one product.
 - **Permanent URL:** this same v0 project (scroll-snap mode, drop present mode's autoplay) is a great
   candidate for the public landing page when you stand up **B**.
