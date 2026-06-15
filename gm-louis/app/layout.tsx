@@ -23,9 +23,9 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: "GM Louis · Governance Management · Compass-BlackBox IQ",
+  title: "GM Louis · Agentic Governance Management · Compass-BlackBox IQ",
   description:
-    "GM Louis — Governance Management, not General Manager. The reasoning agent of Compass-BlackBox IQ: reasons over Microsoft's F.A.M. grounding and logs every decision to a governed vault the human owns.",
+    "GM Louis — Agentic Governance Management. The reasoning agent of Compass-BlackBox IQ: reasons over Microsoft's F.A.M. grounding and logs every decision to a governed vault the human owns.",
   icons: {
     icon: [
       { url: "/icon-light-32x32.png", media: "(prefers-color-scheme: light)" },

@@ -4,6 +4,7 @@ import { useRef, useMemo, useEffect, useState } from "react"
 import { Canvas, useFrame } from "@react-three/fiber"
 import { MathUtils } from "three"
 import type { Mesh, ShaderMaterial } from "three"
+import { voiceLevel } from "@/lib/voice-level"
 
 function Sphere() {
   const meshRef = useRef<Mesh>(null)
@@ -25,12 +26,14 @@ function Sphere() {
     () => ({
       uTime: { value: 0 },
       uMouse: { value: [0, 0] },
+      uAudio: { value: 0 }, // 0..1 voice amplitude — sphere "breathes" while Louis speaks
     }),
     [],
   )
 
   const vertexShader = `
     uniform float uTime;
+    uniform float uAudio;
     varying vec2 vUv;
     varying float vDisplacement;
 
@@ -88,8 +91,9 @@ function Sphere() {
     void main() {
       vUv = uv;
 
-      float noise = snoise(position * 1.5 + uTime * 0.15);
-      float displacement = noise * 0.15;
+      // Voice drives both faster noise evolution and larger spikes while speaking.
+      float noise = snoise(position * 1.5 + uTime * (0.15 + uAudio * 0.5));
+      float displacement = noise * (0.15 + uAudio * 0.55);
       vDisplacement = displacement;
 
       vec3 newPosition = position + normal * displacement;
@@ -100,11 +104,12 @@ function Sphere() {
   // Tinted toward the vault/blackbox amber so the sphere reads as GM Louis,
   // not the template's neutral white wireframe.
   const fragmentShader = `
+    uniform float uAudio;
     varying vec2 vUv;
     varying float vDisplacement;
 
     void main() {
-      float intensity = 0.35 + vDisplacement * 2.0;
+      float intensity = 0.35 + vDisplacement * 2.0 + uAudio * 0.5;
       vec3 warm = vec3(1.0, 0.78, 0.42);   // amber highlight
       vec3 cool = vec3(0.62, 0.66, 0.78);  // cool slate base
       vec3 color = mix(cool, warm, clamp(intensity, 0.0, 1.0)) * intensity;
@@ -112,21 +117,28 @@ function Sphere() {
       float line = smoothstep(0.0, 0.02, abs(fract(vUv.x * 20.0) - 0.5));
       line *= smoothstep(0.0, 0.02, abs(fract(vUv.y * 20.0) - 0.5));
 
-      gl_FragColor = vec4(color * (1.0 - line * 0.5), 0.62);
+      gl_FragColor = vec4(color * (1.0 - line * 0.5), 0.62 + uAudio * 0.3);
     }
   `
 
   useFrame((state, delta) => {
     const p = pointer.current
+    let a = 0
     if (materialRef.current) {
-      materialRef.current.uniforms.uTime.value += delta
-      materialRef.current.uniforms.uMouse.value = [p.x, p.y]
+      const u = materialRef.current.uniforms
+      u.uTime.value += delta
+      u.uMouse.value = [p.x, p.y]
+      // smooth toward the live voice amplitude written by the chat analyser
+      u.uAudio.value = MathUtils.lerp(u.uAudio.value, voiceLevel.value, 0.18)
+      a = u.uAudio.value
     }
 
     if (meshRef.current) {
-      meshRef.current.rotation.y += delta * 0.05
+      meshRef.current.rotation.y += delta * (0.05 + a * 0.08)
       meshRef.current.rotation.x = MathUtils.lerp(meshRef.current.rotation.x, p.y * 0.2, 0.05)
       meshRef.current.rotation.z = MathUtils.lerp(meshRef.current.rotation.z, p.x * 0.2, 0.05)
+      const s = 1 + a * 0.06 // gentle breathing pulse while speaking
+      meshRef.current.scale.set(s, s, s)
     }
   })
 

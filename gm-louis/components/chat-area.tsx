@@ -4,6 +4,7 @@ import { ArrowUp, Mic, MicOff, Volume2, VolumeX, Plus, Square } from "lucide-rea
 import { Button } from "@/components/ui/button"
 import { useEffect, useRef, useState } from "react"
 import { SentientSphere } from "@/components/sentient-sphere"
+import { voiceLevel } from "@/lib/voice-level"
 import ReactMarkdown from "react-markdown"
 
 type Msg = { id: string; role: "user" | "assistant"; content: string }
@@ -28,16 +29,57 @@ export function ChatArea() {
   const endRef = useRef<HTMLDivElement>(null)
   const taRef = useRef<HTMLTextAreaElement>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const ctxRef = useRef<AudioContext | null>(null)
+  const rafRef = useRef<number | null>(null)
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, loading])
+
+  // Feed the playing audio's amplitude into the shared level the sphere reads.
+  function startMeter(a: HTMLAudioElement) {
+    try {
+      const AC = (window.AudioContext || (window as any).webkitAudioContext) as typeof AudioContext
+      if (!AC) return
+      if (!ctxRef.current) ctxRef.current = new AC()
+      const ctx = ctxRef.current
+      void ctx.resume?.()
+      const src = ctx.createMediaElementSource(a)
+      const analyser = ctx.createAnalyser()
+      analyser.fftSize = 256
+      src.connect(analyser)
+      analyser.connect(ctx.destination)
+      const data = new Uint8Array(analyser.frequencyBinCount)
+      const tick = () => {
+        analyser.getByteTimeDomainData(data)
+        let sum = 0
+        for (let i = 0; i < data.length; i++) {
+          const v = (data[i] - 128) / 128
+          sum += v * v
+        }
+        voiceLevel.value = Math.min(1, Math.sqrt(sum / data.length) * 2.4)
+        rafRef.current = requestAnimationFrame(tick)
+      }
+      tick()
+    } catch {
+      // Web Audio unavailable or element already sourced — skip reactivity, audio still plays.
+    }
+  }
+
+  function stopMeter() {
+    if (rafRef.current != null) {
+      cancelAnimationFrame(rafRef.current)
+      rafRef.current = null
+    }
+    voiceLevel.value = 0
+  }
 
   function stopAudio() {
     if (audioRef.current) {
       audioRef.current.pause()
       audioRef.current = null
     }
+    stopMeter()
     setPlayingId(null)
   }
 
@@ -59,9 +101,16 @@ export function ChatArea() {
       if (!blob.size) return
       const a = new Audio(URL.createObjectURL(blob))
       audioRef.current = a
-      a.onended = () => setPlayingId((cur) => (cur === id ? null : cur))
+      a.onended = () => {
+        stopMeter()
+        setPlayingId((cur) => (cur === id ? null : cur))
+      }
       setPlayingId(id)
-      await a.play().catch(() => setPlayingId(null))
+      startMeter(a)
+      await a.play().catch(() => {
+        stopMeter()
+        setPlayingId(null)
+      })
     } catch {
       setPlayingId(null)
     }
@@ -146,7 +195,7 @@ export function ChatArea() {
         <div className="flex items-baseline gap-3">
           <span className="font-display text-xl tracking-tight">GM Louis</span>
           <span className="hidden font-mono text-[10px] uppercase tracking-[0.28em] text-muted-foreground sm:inline">
-            GM · Governance Management
+            Agentic Governance Management
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -187,7 +236,7 @@ export function ChatArea() {
         {empty ? (
           <div className="flex flex-1 flex-col items-center justify-center px-6 text-center">
             <p className="fade-in-up mb-5 font-mono text-[11px] uppercase tracking-[0.3em] text-accent/90">
-              Governance Management · not General Manager
+              Agentic Governance Management
             </p>
             <h1
               className="fade-in-up font-display text-5xl font-medium tracking-tight md:text-7xl"
@@ -200,9 +249,10 @@ export function ChatArea() {
               style={{ animationDelay: "0.12s" }}
             >
               The <span className="text-foreground">GM</span> is for{" "}
-              <span className="text-foreground">Governance Management</span> — I&rsquo;m an enterprise operations
-              agent that runs under the Compass-BlackBox IQ contract. I reason over Microsoft&rsquo;s F.A.M.
-              grounding and log every decision to a vault the human owns.
+              <span className="text-foreground">Governance Management</span> — I practice{" "}
+              <span className="text-foreground">agentic governance management</span>: an enterprise operations
+              agent that runs under the Compass-BlackBox IQ contract, reasoning over Microsoft&rsquo;s F.A.M.
+              grounding and logging every decision to a vault the human owns.
             </p>
             <div className="fade-in-up mt-10 flex flex-wrap items-center justify-center gap-3" style={{ animationDelay: "0.2s" }}>
               {QUICK.map((q) => (
@@ -278,8 +328,8 @@ export function ChatArea() {
           </div>
         )}
 
-        {/* Input */}
-        <div className="w-full max-w-3xl px-4 pb-6 md:px-6">
+        {/* Input — lifted off the bottom so it tucks under the sphere */}
+        <div className="w-full max-w-3xl px-4 pb-12 md:px-6 md:pb-24">
           <div className="rounded-2xl border border-border bg-background/60 p-3 backdrop-blur-xl transition-colors focus-within:border-accent/50">
             <textarea
               ref={taRef}
