@@ -1,13 +1,13 @@
-# Scout Compass
+# Compass Rose
 
-> Navigate from idea to installed skill with a smooth build, preview, and install flow.
+> The no-YAML skill-forge: pick a persona → preview role-fit skills → one-click install.
 
-> **Note:** The Agents League @ AI Skills Fest 2026 hackathon entry is
-> **[scout-compass-mcp](https://github.com/JeremyGracey-AI/scout-compass-mcp)**
-> (governed agent memory — the run-time half of the lifecycle). This repository
-> is the companion skill-authoring tool.
+> **Part of [Compass-BlackBox IQ](../README.md)** — the Agents League @ AI Skills Fest 2026
+> entry (Reasoning Agents track · Microsoft Foundry + MCP). Compass Rose is the skill-authoring
+> layer (build); GM Louis reasons; BlackBox IQ governs & records.
+> Live demo: <https://compass-rose-beta.vercel.app>
 
-A toolkit for authoring **Microsoft Scout** `SKILL.md` files tuned to senior Microsoft executives.
+A toolkit for authoring **Microsoft Scout** `SKILL.md` files tuned to senior executives.
 
 It ships three ways to create skills:
 

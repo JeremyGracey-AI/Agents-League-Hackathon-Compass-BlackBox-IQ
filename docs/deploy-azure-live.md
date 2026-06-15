@@ -126,7 +126,7 @@ Open `https://$WEB_FQDN/` → skill-forge, `/trace` → Foundry IQ + Work IQ lig
 When the Activity panel starts erroring, re-mint and roll the secret:
 
 ```bash
-MPW='WorkIQAgent2026!' bash ~/wiq-refresh.sh    # mints a fresh morgan token (prints it)
+MPW='<MORGAN_DEMO_PASSWORD>' bash ~/wiq-refresh.sh   # mints a fresh morgan token (prints it)
 az containerapp secret set -g rg-jg-3018 -n ggr-server --secrets work-token='<NEW_TOKEN>'
 az containerapp revision restart -g rg-jg-3018 -n ggr-server \
   --revision "$(az containerapp show -g rg-jg-3018 -n ggr-server --query properties.latestRevisionName -o tsv)"
