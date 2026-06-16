@@ -4,6 +4,7 @@ import { ArrowUp, Mic, MicOff, Volume2, VolumeX, Plus, Square } from "lucide-rea
 import { Button } from "@/components/ui/button"
 import { useEffect, useRef, useState } from "react"
 import { SentientSphere } from "@/components/sentient-sphere"
+import { GreetingHeadline } from "@/components/greeting-headline"
 import { voiceLevel } from "@/lib/voice-level"
 import ReactMarkdown from "react-markdown"
 
@@ -19,15 +20,6 @@ function uid() {
   return Math.random().toString(36).slice(2) + Date.now().toString(36)
 }
 
-// Anthropic-style greeting that follows the visitor's local clock.
-function greetingForHour(h: number) {
-  if (h < 5) return "Working late?"
-  if (h < 12) return "Good morning."
-  if (h < 17) return "Good afternoon."
-  if (h < 22) return "Good evening."
-  return "Working late?"
-}
-
 export function ChatArea() {
   const [messages, setMessages] = useState<Msg[]>([])
   const [input, setInput] = useState("")
@@ -35,7 +27,6 @@ export function ChatArea() {
   const [listening, setListening] = useState(false)
   const [speakOn, setSpeakOn] = useState(true)
   const [playingId, setPlayingId] = useState<string | null>(null)
-  const [greeting, setGreeting] = useState<string | null>(null)
   const endRef = useRef<HTMLDivElement>(null)
   const taRef = useRef<HTMLTextAreaElement>(null)
   const audioRef = useRef<HTMLAudioElement | null>(null)
@@ -45,15 +36,6 @@ export function ChatArea() {
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages, loading])
-
-  // Set on the client (avoids SSR/local-time hydration mismatch); re-checks so it
-  // rolls over if the tab is left open across an hour boundary.
-  useEffect(() => {
-    const update = () => setGreeting(greetingForHour(new Date().getHours()))
-    update()
-    const t = setInterval(update, 60_000)
-    return () => clearInterval(t)
-  }, [])
 
   // Feed the playing audio's amplitude into the shared level the sphere reads.
   function startMeter(a: HTMLAudioElement) {
@@ -262,13 +244,7 @@ export function ChatArea() {
               className="fade-in-up mb-6 w-60 max-w-full select-none sm:w-72 md:w-[340px]"
               draggable={false}
             />
-            <h1
-              className="fade-in-up font-display text-3xl font-medium tracking-tight sm:text-4xl md:text-5xl"
-              style={{ animationDelay: "0.05s" }}
-              suppressHydrationWarning
-            >
-              {greeting ?? "I’m GM Louis."}
-            </h1>
+            <GreetingHeadline className="font-display text-3xl font-medium tracking-tight sm:text-4xl md:text-5xl" />
             <p
               className="fade-in-up mt-6 max-w-xl text-pretty leading-relaxed text-muted-foreground"
               style={{ animationDelay: "0.12s" }}
